@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface DispositivoRepository extends JpaRepository<Dispositivo, Long> {
     List<Dispositivo> findByTipo(String tipo);
-    List<Dispositivo> findByStato(String stato)
+    List<Dispositivo> findByStato(String stato);
 
 }
