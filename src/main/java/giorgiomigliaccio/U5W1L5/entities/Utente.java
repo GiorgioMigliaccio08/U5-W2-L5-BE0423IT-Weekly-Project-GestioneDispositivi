@@ -24,6 +24,10 @@ public class Utente {
    @OneToMany(mappedBy = "utente")
    private List<Dispositivo> dispositivi;
 
+    public static Utente save(Utente utente) {
+        return utente;
+    }
+
     //GETTER AND SETTER
     public String getUsername() {
         return username;

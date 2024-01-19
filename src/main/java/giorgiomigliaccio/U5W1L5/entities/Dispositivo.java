@@ -23,8 +23,10 @@ public class Dispositivo {
     //CREO LA RELAZIONE CON LE ALTRE CLASSI:
     @ManyToOne
     private Utente utente;
+    private Tipo tipo;
+    private Stato stato;
 
-//GETTER AND SETTER
+    //GETTER AND SETTER
     public String getMarca() {
         return marca;
     }
@@ -73,5 +75,21 @@ public class Dispositivo {
                 ", statoDispositivo=" + statoDispositivo +
                 ", utente=" + utente +
                 '}';
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public Stato getStato() {
+        return stato;
+    }
+
+    public void setStato(Stato stato) {
+        this.stato = stato;
     }
 }
