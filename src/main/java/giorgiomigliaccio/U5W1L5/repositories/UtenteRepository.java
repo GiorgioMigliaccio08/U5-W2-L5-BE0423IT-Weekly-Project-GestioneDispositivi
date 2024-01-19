@@ -6,11 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface UtenteRepository extends JpaRepository<Utente, Long> {
 
-        Optional<Utente> findByUsername(String username);
+
+
+    Optional<Utente> findByUsername(String username);
         List<Utente> findByNomeAndCognome(String nome, String cognome);
 
     }
