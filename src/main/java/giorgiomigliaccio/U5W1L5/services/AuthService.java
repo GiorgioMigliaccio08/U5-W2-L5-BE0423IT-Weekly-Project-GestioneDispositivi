@@ -11,6 +11,12 @@ public class AuthService {
     @Autowired
     UsersService usersService;
 
+    @Autowired
+    private UsersDAO usersDAO;
+
+    @Autowired
+    private PasswordEncoder bcrypt;
+
     public String authenticateUser(UserLoginDTO body) {
         // 1. Verifichiamo che l'email dell'utente sia nel db
         User user = usersService.findByEmail(body.email());
@@ -23,5 +29,24 @@ public class AuthService {
             // 4. Se le credenziali NON sono OK --> 401 (Unauthorized)
             throw new UnauthorizedException("Credenziali non valide!");
         }
+    }
+
+    public User save(NewUserDTO body) {
+        // Verifico se l'email è già in uso
+		/*Optional<User> user = usersDAO.findByEmail(body.getEmail());
+		if(user.isPresent()) throw new RuntimeException();*/
+
+        usersDAO.findByEmail(body.email()).ifPresent(user -> {
+            throw new BadRequestException("L'email " + user.getEmail() + " è già in uso!");
+        });
+
+        User newUser = new User();
+        newUser.setSurname(body.surname());
+        newUser.setName(body.name());
+        newUser.setEmail(body.email());
+        // newUser.setPassword(body.password());
+        newUser.setPassword(bcrypt.encode(body.password()));
+        newUser.setRole(Role.USER);
+        return usersDAO.save(newUser);
     }
 }
