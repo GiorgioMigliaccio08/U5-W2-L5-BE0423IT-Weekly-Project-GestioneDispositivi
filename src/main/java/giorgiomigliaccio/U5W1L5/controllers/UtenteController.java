@@ -4,6 +4,7 @@ import giorgiomigliaccio.U5W1L5.entities.Utente;
 import giorgiomigliaccio.U5W1L5.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,32 @@ public class UtenteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable UUID utenteId) {
         utenteService.deleteById(utenteId);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')") // Solo gli admin possono leggere l'elenco degli utenti
+    public Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(defaultValue = "id") String orderBy) {
+        return usersService.getUsers(page, size, orderBy);
+    }
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable UUID userId) {
+        return usersService.findById(userId);
+    }
+
+
+    @PutMapping("/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User getUserByIdAndUpdate(@PathVariable UUID userId, @RequestBody User modifiedUserPayload) {
+        return usersService.findByIdAndUpdate(userId, modifiedUserPayload);
+    }
+
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void getUserByIdAndDelete(@PathVariable UUID userId) {
+        usersService.findByIdAndDelete(userId);
     }
 
     //UPLOAD DELL'IMMAGINE
