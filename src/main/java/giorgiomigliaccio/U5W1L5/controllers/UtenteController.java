@@ -42,6 +42,25 @@ public class UtenteController {
         utenteService.deleteById(utenteId);
     }
 
+    @GetMapping("/me")
+    public User getProfile(@AuthenticationPrincipal User currentUser) {
+        // @AuthenticationPrincipal permette di accedere ai dati dell'utente attualmente autenticato
+        // (perchè avevamo estratto l'id dal token e cercato l'utente nel db)
+        return currentUser;
+    }
+
+
+    @PutMapping("/me")
+    public User getMeAndUpdate(@AuthenticationPrincipal User currentUser, @RequestBody User body) {
+        return usersService.findByIdAndUpdate(currentUser.getId(), body);
+    }
+
+    @DeleteMapping("/me")
+    public void getMeAnDelete(@AuthenticationPrincipal User currentUser) {
+        usersService.findByIdAndDelete(currentUser.getId());
+    }
+
+
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')") // Solo gli admin possono leggere l'elenco degli utenti
     public Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
